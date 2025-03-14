@@ -1,23 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, Text, Image, FlatList, StyleSheet } from 'react-native';
-import * as Font from 'expo-font';
-import AppLoading from 'expo-app-loading';
-
-const loadFonts = async () => {
-  await Font.loadAsync({
-    'Nunito-Medium': require('./assets/fonts/NunitoSans_7pt_Condensed-Medium.ttf'),
-  });
-};
+import { useFonts } from 'expo-font';
 
 export default function App() {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
-
-  useEffect(() => {
-    loadFonts().then(() => setFontsLoaded(true));
-  }, []);
+  // Usando o hook useFonts para carregar as fontes
+  const [fontsLoaded] = useFonts({
+    'Nunito-Medium': require('./assets/fonts/NunitoSans_7pt_Condensed-Medium.ttf'),
+  });
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>Carregando fontes...</Text>
+      </View>
+    );
   }
 
   // Dados do que tem no aplicativo com descrição
@@ -88,8 +84,8 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#fff',
     borderRadius: 10,
-    padding: 5,
-    marginBottom: 5,
+    padding: 10,
+    marginBottom: 15,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
@@ -111,5 +107,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: 'Nunito-Medium',
     marginTop: 4,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
